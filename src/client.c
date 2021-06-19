@@ -6,41 +6,15 @@
 /*   By: seuan <seuan@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 11:07:07 by seuan             #+#    #+#             */
-/*   Updated: 2021/06/18 22:27:09 by seuan            ###   ########.fr       */
+/*   Updated: 2021/06/19 14:04:49 by seuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-char	*ft_ctobit(char carattere)
+void		end_checker(int pid)
 {
 	int		i;
-	char	*ret;
-
-	ret = malloc(sizeof(8));
-	if (ret == 0)
-		exit(0);
-	ret[7] = 0;
-	i = 6;
-	while (carattere > 1)
-	{
-		ret[i] = (carattere % 2) + 48;
-		carattere /= 2;
-		i--;
-	}
-	ret[i] = (carattere % 2) + 48;
-	i--;
-	while (i >= 0)
-	{
-		ret[i] = 48;
-		i--;
-	}
-	return (ret);
-}
-
-void	ft_send_term(int pid)
-{
-	int	i;
 
 	i = 0;
 	while (i < 7)
@@ -51,42 +25,63 @@ void	ft_send_term(int pid)
 	}
 }
 
-void	ft_send_signal(int pid, char *string)
+char		*char_to_bit(char c)
+{
+	int		i;
+	char	*str;
+
+	if (!(str = malloc(sizeof(8))))
+		exit(0);
+	str[7] = 0;
+	i = 6;
+	while (c > 1)
+	{
+		str[i] = (c % 2) + 48;
+		c /= 2;
+		i--;
+	}
+	str[i] = (c % 2) + 48;
+	i--;
+	while (i >= 0)
+		str[i--] = 48;
+	return (str);
+}
+
+void		send_sig(int pid, char *string)
 {
 	int		i;
 	int		j;
-	char	*temp;
+	char	*tmp;
 
 	i = 0;
 	while (string[i])
 	{
-		temp = ft_ctobit(string[i]);
+		if (!(tmp = char_to_bit(string[i])))
+			exit(0);
 		j = 0;
-		while (temp[j])
+		while (tmp[j])
 		{
-            // 0을 만나면 SIGUSR1으로 1을 만나면 SIGUSR2로 저장
-			if (temp[j] == '0')
+			if (tmp[j] == '0')
 				kill(pid, SIGUSR1);
-            else
-            	kill(pid, SIGUSR2);
-            j++;
+			else
+				kill(pid, SIGUSR2);
+			j++;
 			usleep(50);
 		}
-		free(temp);
+		free(tmp);
 		i++;
 	}
-	ft_send_term(pid);
+	end_checker(pid);
 }
 
-int main(int argc, char **argv)
-{   
-    int     pid;
-    char    *string;
+int			main(int argc, char **argv)
+{
+	int		pid;
+	char	*string;
 
-
-    if (argc != 3)
-        exit(0);
-    pid = ft_atoi(argv[1]);
+	if (argc != 3)
+		exit(0);
+	pid = ft_atoi(argv[1]);
 	string = argv[2];
-    ft_send_signal(pid, string);
+	send_sig(pid, string);
 }

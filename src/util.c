@@ -6,15 +6,15 @@
 /*   By: seuan <seuan@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 11:42:53 by seuan             #+#    #+#             */
-/*   Updated: 2021/06/18 11:57:40 by seuan            ###   ########.fr       */
+/*   Updated: 2021/06/19 14:02:37 by seuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int		num_counter(int n)
+int					num_counter(int n)
 {
-	int	cnt;
+	int				cnt;
 
 	cnt = 1;
 	if (-2147483648 < n && n < 0)
@@ -32,9 +32,9 @@ int		num_counter(int n)
 	return (cnt);
 }
 
-char	*positive_num(int n, int n_cnt)
+char				*positive_num(int n, int n_cnt)
 {
-	char	*str;
+	char			*str;
 
 	str = (char *)malloc(sizeof(char) * (n_cnt + 1));
 	if (!str)
@@ -48,7 +48,7 @@ char	*positive_num(int n, int n_cnt)
 	return (str);
 }
 
-char	*ft_itoa(int n)
+char				*ft_itoa(int n)
 {
 	int				n_cnt;
 	unsigned int	num;
@@ -74,14 +74,14 @@ char	*ft_itoa(int n)
 	return (positive_num(n, n_cnt));
 }
 
-void	ft_putchar_fd(char c, int fd)
+void				ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char *s, int fd)
+void				ft_putstr_fd(char *s, int fd)
 {
-	size_t	idx;
+	size_t			idx;
 
 	idx = 0;
 	if (!s)
